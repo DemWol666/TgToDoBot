@@ -108,7 +108,7 @@ def complete_task(call):
 def check_valid_summ(message):
     try:
         limit = int(message.text.strip())
-        if limit > 10 or limit < 1:
+        if limit > 10 or limit < 1 or limit == 5:
             return '❌ Не более 10 изображений! Введи корректное число ❌', -1, -1
         else:
             print(f'Limit check_valid_summ {limit}')
