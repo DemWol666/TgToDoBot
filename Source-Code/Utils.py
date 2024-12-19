@@ -119,12 +119,10 @@ def check_valid_summ(message):
 def compress_image(image_url):
     response = requests.get(image_url)
     
-    # Проверяем успешность запроса и тип содержимого
     if response.status_code != 200:
         print(f"Failed to retrieve image from {image_url}. Status code: {response.status_code}")
         return None
     
-    # Проверяем тип содержимого
     if 'image' not in response.headers.get('Content-Type', ''):
         print(f"The URL {image_url} does not point to an image.")
         return None
@@ -170,9 +168,19 @@ def convert_webp_to_mp4(webp_url, output_file=VIDEOOUTPUT_FILE):
         print(f"⚠️ Файл {webp_path} не найден, возможно он уже удалён.")
     return output_file
 
+def remove_none_values(data):
+    if isinstance(data, list):
+        return [remove_none_values(item) for item in data if item is not None]
+    elif isinstance(data, dict):
+        return {key: remove_none_values(value) for key, value in data.items() if value is not None}
+    else:
+        return data
+
 def handle_response(message, tags, limit):
     print(f'Limit handle_response {limit}')
     posts = e621.posts.search(tags=tags, limit=limit)
+    clean_posts = remove_none_values(posts)
+    posts = e621.base_model.Post.from_list(clean_posts)
     image_url = [post.file.url for post in posts]
     print(f'Image url {image_url}')
     all_media = []
