@@ -41,6 +41,7 @@ def initialization(bot):
     def message_show_tasks(message):
         response, num = show_tasks(message)
         if num == None:
+            bot.send_message(message.chat.id, response)
             bot.send_message(message.chat.id, '⬅️ Нажмите "Назад", чтобы вернуться в главное меню.', reply_markup=back_button())
         else:
             bot.send_message(message.chat.id, response, parse_mode='Markdown', reply_markup=tasks_Keyboard(num))
