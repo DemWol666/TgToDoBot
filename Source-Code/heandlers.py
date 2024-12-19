@@ -99,15 +99,16 @@ def initialization(bot):
         media, code_number = handle_response(message, tags, limit)
         number = 0
         print(f'media content {media}')
-        for content in media:
-            if code_number[number] == 1:
-                bot.send_video(message.chat.id, content, supports_streaming=True)
-                number += 1
-            elif code_number[number] == 2:
-                bot.send_photo(message.chat.id, content)
-                number += 1
-            else:
-                bot.send_message(message.chat.id, "❌ Таких тегов нет/Ответ пуст. Повторите попытку /wolf")
+        if media:
+            for content in media:
+                if code_number[number] == 1:
+                    bot.send_video(message.chat.id, content, supports_streaming=True)
+                    number += 1
+                elif code_number[number] == 2:
+                    bot.send_photo(message.chat.id, content)
+                    number += 1
+        else:
+            bot.send_message(message.chat.id, "❌ Таких тегов нет/Ответ пуст. Повторите попытку /wolf")
         messege_ask_tags(message)
 
 
