@@ -69,13 +69,17 @@ def initialization(bot):
             bot.answer_callback_query(call.id, response)
     
     def message_edit_task(message, user_id, task_index, task_to_edit):
-        new_text = message.text.strip()
-        if not new_text:
-            bot.send_message(message.chat.id, '❌ Новый текст задачи не может быть пустым.')
-            return
-        response = process_edit_task(new_text, user_id, task_index, task_to_edit)
-        bot.send_message(message.chat.id, response)
-        show_tasks(message)
+        if message.content_type != 'text':
+            bot.send_message(message.chat.id, 'Разрешено писать только текст и без смайликов')
+            bot.register_next_step_handler(message, message_edit_task, user_id, task_index, task_to_edit)
+        else:   
+            new_text = message.text.strip()
+            if not new_text:
+                bot.send_message(message.chat.id, '❌ Новый текст задачи не может быть пустым.')
+                return
+            response = process_edit_task(new_text, user_id, task_index, task_to_edit)
+            bot.send_message(message.chat.id, response)
+            show_tasks(message)
     
     @bot.callback_query_handler(func=lambda call: call.data.startswith('complete_'))
     def message_complete_task(call):
