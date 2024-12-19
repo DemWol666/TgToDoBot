@@ -40,8 +40,11 @@ def initialization(bot):
     @bot.message_handler(func=lambda message: message.text == '📋 Мои задачи')
     def message_show_tasks(message):
         response, num = show_tasks(message)
-        bot.send_message(message.chat.id, response, parse_mode='Markdown', reply_markup=tasks_Keyboard(num))
-        bot.send_message(message.chat.id, '⬅️ Нажмите "Назад", чтобы вернуться в главное меню.', reply_markup=back_button())
+        if num == None:
+            bot.send_message(message.chat.id, '⬅️ Нажмите "Назад", чтобы вернуться в главное меню.', reply_markup=back_button())
+        else:
+            bot.send_message(message.chat.id, response, parse_mode='Markdown', reply_markup=tasks_Keyboard(num))
+        
 
     @bot.callback_query_handler(func=lambda call: call.data.startswith('editRem_'))
     def callback_edit_message(call):
@@ -96,6 +99,7 @@ def initialization(bot):
             send_media(message, tags, limit)
 
     def send_media(message, tags, limit):
+        bot.send_message(message.chat.id, "🔄 В обработке. Ожидайте")
         media, code_number = handle_response(message, tags, limit)
         number = 0
         print(f'media content {media}')

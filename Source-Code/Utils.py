@@ -63,7 +63,7 @@ def show_tasks(message):
     user_tasks = tasks.get(user_id, [])
 
     if not user_tasks:
-        return 'У вас нет задач'
+        return 'У вас нет задач', None
     
     for i, task in enumerate(user_tasks, start=1):
         response = f'📋 Задача {i}:\n*{task["task"]}*\n🕒 Дедлайн: {task["deadline"]}'
