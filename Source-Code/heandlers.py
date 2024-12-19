@@ -26,8 +26,15 @@ def initialization(bot):
     @bot.message_handler(func=lambda message: message.text == '🆕 Добавить задачу')
     def message_add_task(message):
         bot.send_message(message.chat.id, 'Отправь текст задачи.')
-        bot.register_next_step_handler(message, get_deadline)
+        bot.register_next_step_handler(message, check_isText)
     
+    def check_isText(message):
+        if message.content_type != 'text':
+            bot.send_message(message.chat.id, 'Разрешено писать только текст и без смайликов')
+            message_add_task(message)
+        else:
+            get_deadline(message)
+
     def get_deadline(message):
         task_text = message.text.strip()
         bot.send_message(message.chat.id, 'Теперь отправь дату дедлайна в формате ДД.ММ.ГГГГ ЧЧ:ММ')
