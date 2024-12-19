@@ -125,18 +125,5 @@ def initialization(bot):
                     bot.send_photo(message.chat.id, content)
                     number += 1
         else:
-            bot.send_message(message.chat.id, "❌ Таких тегов нет/Ответ пуст. Повторите попытку /wolf")
+            bot.send_message(message.chat.id, "❌ Таких тегов нет/Ответ пуст. Повторите попытку")
         messege_ask_tags(message)
-
-
-        
-
-
-
-
-
-            
-
-
-    
-
