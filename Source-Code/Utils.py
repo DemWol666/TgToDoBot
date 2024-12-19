@@ -61,13 +61,19 @@ def save_task(message, task_text):
 def show_tasks(message):
     user_id = str(message.chat.id)
     user_tasks = tasks.get(user_id, [])
+    resp = []
+    reti = []
 
     if not user_tasks:
         return 'У вас нет задач', None
     
     for i, task in enumerate(user_tasks, start=1):
         response = f'📋 Задача {i}:\n*{task["task"]}*\n🕒 Дедлайн: {task["deadline"]}'
-        return response, i
+        resp.append(response)
+        reti.append(i)
+        #return response, i
+    return resp, reti
+    
 
 def edit_task(call):
     user_id = str(call.message.chat.id)
@@ -102,7 +108,7 @@ def complete_task(call):
 def check_valid_summ(message):
     try:
         limit = int(message.text.strip())
-        if limit > 10:
+        if limit > 10 or limit < 1:
             return '❌ Не более 10 изображений! Введи корректное число ❌', -1, -1
         else:
             print(f'Limit check_valid_summ {limit}')

@@ -35,7 +35,11 @@ def initialization(bot):
 
     def send_deadline(message, task_text):
         result = save_task(message, task_text)
-        bot.send_message(message.chat.id, result)
+        if result == '❌ Неверный формат даты. Попробуй снова (ДД.ММ.ГГГГ ЧЧ:ММ).':
+            bot.send_message(message.chat.id, result)
+            bot.register_next_step_handler(message, send_deadline, task_text)
+        else:
+            bot.send_message(message.chat.id, result)
     
     @bot.message_handler(func=lambda message: message.text == '📋 Мои задачи')
     def message_show_tasks(message):
@@ -44,7 +48,8 @@ def initialization(bot):
             bot.send_message(message.chat.id, response)
             bot.send_message(message.chat.id, '⬅️ Нажмите "Назад", чтобы вернуться в главное меню.', reply_markup=back_button())
         else:
-            bot.send_message(message.chat.id, response, parse_mode='Markdown', reply_markup=tasks_Keyboard(num))
+            for i in range(len(response)):
+                bot.send_message(message.chat.id, response[i], parse_mode='Markdown', reply_markup=tasks_Keyboard(num[i]))
         
 
     @bot.callback_query_handler(func=lambda call: call.data.startswith('editRem_'))
